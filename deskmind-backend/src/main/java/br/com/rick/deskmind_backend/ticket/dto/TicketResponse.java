@@ -1,4 +1,7 @@
-package br.com.rick.deskmind_backend.ticket;
+package br.com.rick.deskmind_backend.ticket.dto;
+
+import br.com.rick.deskmind_backend.ticket.Ticket;
+import br.com.rick.deskmind_backend.ticket.TicketStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

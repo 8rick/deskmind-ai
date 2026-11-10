@@ -1,4 +1,4 @@
-package br.com.rick.deskmind_backend.ticket;
+package br.com.rick.deskmind_backend.ticket.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
