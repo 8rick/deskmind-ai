@@ -1,5 +1,7 @@
 package br.com.rick.deskmind_backend.ticket;
 
+import br.com.rick.deskmind_backend.ticket.dto.CreateTicketRequest;
+import br.com.rick.deskmind_backend.ticket.dto.TicketResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

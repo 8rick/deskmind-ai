@@ -1,11 +1,12 @@
 package br.com.rick.deskmind_backend.ticket;
 
 
+import br.com.rick.deskmind_backend.ticket.dto.CreateTicketRequest;
+import br.com.rick.deskmind_backend.ticket.dto.TicketResponse;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-
 @Service
 public class TicketService {
 
