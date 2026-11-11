@@ -12,7 +12,7 @@ public record TicketResponse(
         String description,
         TicketStatus status,
         LocalDateTime createdAt,
-        LocalDateTime updateAt
+        LocalDateTime updatedAt
 ) {
     public static TicketResponse from(Ticket ticket) {
         return new TicketResponse(

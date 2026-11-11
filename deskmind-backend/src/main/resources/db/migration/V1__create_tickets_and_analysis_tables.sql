@@ -4,7 +4,7 @@ CREATE TABLE ticket (
                  description TEXT,
                  status VARCHAR(30) NOT NULL,
                  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ticket_analysis (
