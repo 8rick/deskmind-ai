@@ -20,7 +20,7 @@ public class Ticket {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 30)
     private TicketStatus status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -51,10 +51,23 @@ public class Ticket {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void updateStatus(TicketStatus NewStatus) {
+        if(status == null) {
+            throw new IllegalArgumentException("O novo status não pode ser nulo.");
+        }
+
+        if(this.status == TicketStatus.CLOSED) {
+            throw new InvalidTicketStateException("Não é possível alterar o status de um chamado que já está fechado.");
+        }
+        this.status = NewStatus;
+    }
+
     public UUID getId() { return id;}
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public TicketStatus getStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+
 }
