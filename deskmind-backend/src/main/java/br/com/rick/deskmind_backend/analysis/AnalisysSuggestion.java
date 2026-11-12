@@ -1,0 +1,11 @@
+package br.com.rick.deskmind_backend.analysis;
+
+public record AnalisysSuggestion(
+        AnalysisCategory category,
+        AnalysisCategory priority,
+        String summary,
+        String suggested,
+        String reasoning
+) {
+
+}
