@@ -52,8 +52,8 @@ public class Ticket {
     }
 
     public void updateStatus(TicketStatus NewStatus) {
-        if(status == null) {
-            throw new IllegalArgumentException("O novo status não pode ser nulo.");
+        if(NewStatus == null) {
+            throw new InvalidTicketStateException("O novo status não pode ser nulo.");
         }
 
         if(this.status == TicketStatus.CLOSED) {
