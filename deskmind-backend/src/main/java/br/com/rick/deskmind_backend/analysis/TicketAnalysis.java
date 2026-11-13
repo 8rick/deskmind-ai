@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
@@ -36,13 +37,20 @@ public class TicketAnalysis {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-   protected TicketAnalysis() {}
+    protected TicketAnalysis() {}
 
-    public TicketAnalysis(Ticket ticket,  AnalysisCategory category, AnalysisPriority suggestedPriority, String summary, String suggestedResponse, String reasoning) {}
+   protected TicketAnalysis(Ticket ticket, AnalysisCategory category, AnalysisPriority priority, String summary, String suggested, String reasoning) {
+       this.ticket = ticket;
+       this.category = category;
+       this.suggestedPriority = priority;
+       this.summary = summary;
+       this.suggestedResponse = suggested;
+       this.reasoning = reasoning;
+   }
 
     @PrePersist
     void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS);
     }
 
     public UUID getId() {
