@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 public class FakeTicketAnalyzer implements TicketAnalyzer {
 
     @Override
-    public AnalisysSuggestion analyze(String tiltle, String description) {
-       return new AnalisysSuggestion(
-               AnalysisCategory.GENERAL,
-               AnalysisCategory.MEDIUM,
-               "Análise inicial do chamado: " + tiltle,
-               "Óla Recebemos seu chamado e nossa equipe já está verificando a solicitação.",
-               "Classificação gerada pelo analisador simulado (FakeTicketAnalyzer)."
-                );
+    public AnalisysSuggestion analyze(String title, String description) {
+        return new AnalisysSuggestion(
+                AnalysisCategory.GENERAL,
+                AnalysisPriority.MEDIUM,
+                "Análise inicial do chamado: " + title,
+                "Olá! Recebemos o seu chamado e nossa equipe já está verificando a solicitação.",
+                "Classificação gerada pelo analisador simulado (FakeTicketAnalyzer)."
+        );
     }
 }
