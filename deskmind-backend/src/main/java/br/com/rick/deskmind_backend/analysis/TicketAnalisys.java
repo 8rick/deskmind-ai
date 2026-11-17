@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "ticket_analysis")
-public class TicketAnalysis {
+public class TicketAnalisys {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,11 +21,11 @@ public class TicketAnalysis {
     private Ticket ticket;
 
     @Enumerated(EnumType.STRING)
-    private AnalysisCategory category;
+    private AnalisysCategory category;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "suggested_priority")
-    private AnalysisPriority suggestedPriority;
+    private AnalisysPriority suggestedPriority;
 
     private String summary;
 
@@ -37,9 +37,9 @@ public class TicketAnalysis {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    protected TicketAnalysis() {}
+    protected TicketAnalisys() {}
 
-   protected TicketAnalysis(Ticket ticket, AnalysisCategory category, AnalysisPriority priority, String summary, String suggested, String reasoning) {
+   protected TicketAnalisys(Ticket ticket, AnalisysCategory category, AnalisysPriority priority, String summary, String suggested, String reasoning) {
        this.ticket = ticket;
        this.category = category;
        this.suggestedPriority = priority;
@@ -61,11 +61,11 @@ public class TicketAnalysis {
         return ticket;
     }
 
-    public AnalysisCategory getCategory() {
+    public AnalisysCategory getCategory() {
         return category;
     }
 
-    public AnalysisPriority getSuggestedPriority() {
+    public AnalisysPriority getSuggestedPriority() {
         return suggestedPriority;
     }
 

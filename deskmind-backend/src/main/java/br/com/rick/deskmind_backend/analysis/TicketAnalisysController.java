@@ -2,6 +2,8 @@ package br.com.rick.deskmind_backend.analysis;
 
 import br.com.rick.deskmind_backend.analysis.dto.AnalisysResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,11 +14,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/tickets/{ticketId}/analyses")
-public class TicketAnalysisController {
+public class TicketAnalisysController {
 
-    private final TicketAnalysisService ticketAnalysisService;
+    private final TicketAnalisysService ticketAnalysisService;
 
-    public  TicketAnalysisController(TicketAnalysisService ticketAnalysisService) {
+    public TicketAnalisysController(TicketAnalisysService ticketAnalysisService) {
         this.ticketAnalysisService = ticketAnalysisService;
     }
 
@@ -29,7 +31,7 @@ public class TicketAnalysisController {
                 .path("/{id}")
                 .buildAndExpand(response.id())
                 .toUri();
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
