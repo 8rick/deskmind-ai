@@ -1,10 +1,6 @@
 from  fastapi import FastAPI
-from app.schemas import (
-    AnalysisCategory,
-    AnalysisPriority,
-    AnalysisRequest, 
-    AnalysisResponse
-)
+from app.schemas import AnalysisRequest, AnalysisResponse
+from app.analyzer import analyze
 
 app = FastAPI(title="Deskmin AI service")
 
@@ -14,11 +10,5 @@ def health_check():
 
 @app.post("/analyze", response_model=AnalysisResponse)
 def analyze_ticket(request: AnalysisRequest):
-   return AnalysisResponse(
-        category=AnalysisCategory.GENERAL,
-        priority=AnalysisPriority.MEDIUM,
-        summary=f"Análise inicial do chamado {request.title}",
-        suggested_response="Olá, Recebemos o seu chamado e nossa equipe já está verificando a solicitação.",
-        reasoning="Classificação fixa gerada pelo serviço Python.",
-    )
+    return analyze(request.title, request.description)
     
