@@ -1,5 +1,6 @@
 package br.com.rick.deskmind_backend.shared;
 
+import br.com.rick.deskmind_backend.analysis.AiServiceUnavailableException;
 import br.com.rick.deskmind_backend.ticket.InvalidTicketStateException;
 import br.com.rick.deskmind_backend.ticket.TicketNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,12 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
         problemDetail.setTitle("Regra de negócio violada");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    @ExceptionHandler(AiServiceUnavailableException.class)
+    public ResponseEntity<ProblemDetail> handleAiServiceUnavailableException(AiServiceUnavailableException ex){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        problemDetail.setTitle("Serviço de IA indisponível");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problemDetail);
     }
 }
