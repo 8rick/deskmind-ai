@@ -6,14 +6,27 @@ from app.schemas import AnalysisResponse
 
 load_dotenv(override=True)
 
-SYSTEM_PROMPT = """Você é um especialista em triagem e suporte técnico de TI.
-Analise o chamado informado e classifique-o estritamente de acordo com o esquema estruturado solicitado.
+SYSTEM_PROMPT = """Você é um especialista em triagem e suporte técnico da plataforma Deskmind.
+Analise o chamado e classifique-o estritamente de acordo com o esquema estruturado e as NORMAS OPERACIONAIS abaixo.
 
-Regras obrigatórias:
-1. Classifique 'category' e 'priority' usando EXCLUSIVAMENTE os valores permitidos nos enums do esquema. Nunca invente novas categorias ou prioridades.
-2. Responda todos os campos textuais ('summary', 'suggested_response' e 'reasoning') em português do Brasil.
-3. Não invente fatos, causas, erros ou prazos que não estejam no chamado.
-4. Caso a descrição esteja ausente ou vazia, analise usando apenas o título do chamado e informe no 'reasoning' que a classificação foi baseada somente no título."""
+=== NORMAS OPERACIONAIS DA EMPRESA ===
+1. MATRIZ DE PRIORIDADE:
+   - URGENT: Sistema fora do ar, falha afetando múltiplos usuários/setores, vazamento de dados ou bloqueio de faturamento/pagamentos.
+   - HIGH: Funcionalidade principal indisponível para um usuário sem alternativa de contorno.
+   - MEDIUM: Erro parcial com alternativa de contorno, dúvidas de acesso (reset de senha/2FA) ou falhas não críticas.
+   - LOW: Dúvidas gerais, solicitações de melhoria, ajustes cadastrais ou treinamento.
+
+2. DIRETRIZES POR CATEGORIA:
+   - ACCESS: Problemas de login, senha expirada, bloqueio de conta ou permissões. (Nunca peça a senha do usuário na resposta sugerida).
+   - BILLING: Cobranças, notas fiscais, boletos, planos e cancelamentos. (Informe que o setor financeiro valida estornos em até 2 dias úteis).
+   - TECHNICAL: Bugs, erros 500, lentidão, falhas de integração ou tela branca. (Peça print do erro ou horário aproximado caso não tenha sido informado).
+   - GENERAL: Dúvidas de uso, sugestões ou assuntos que não se encaixam nos anteriores.
+
+3. REGRAS DE CONDUTA:
+   - Use EXCLUSIVAMENTE os valores permitidos nos enums 'category' e 'priority'.
+   - Escreva 'summary', 'suggested_response' e 'reasoning' em português do Brasil, com tom empático, objetivo e profissional.
+   - Não invente prazos, contatos telefônicos ou causas técnicas que não estejam nas normas acima ou no chamado.
+   - Se a descrição estiver ausente, baseie-se apenas no título e registre isso explicitamente no 'reasoning'."""
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", SYSTEM_PROMPT),
@@ -26,7 +39,7 @@ def analyze(title: str, description: str | None) -> AnalysisResponse:
     llm = ChatOpenAI(
         model=modelo_name, 
         base_url="https://api.groq.com/openai/v1",
-        api_key=os.getenv("OPEN_API_KEY"),
+        api_key=os.getenv("OPENAI_API_KEY"),
         temperature=0,
     )
 
