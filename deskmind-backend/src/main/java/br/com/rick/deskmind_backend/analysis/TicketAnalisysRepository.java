@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface TicketAnalisysRepository extends JpaRepository<TicketAnalysis, UUID> {
-      List<TicketAnalysis> findByTicketIdOrderByCreatedAtDesc(UUID ticketId);
+public interface TicketAnalisysRepository extends JpaRepository<TicketAnalisys, UUID> {
+      List<TicketAnalisys> findByTicketIdOrderByCreatedAtDesc(UUID ticketId);
 }
