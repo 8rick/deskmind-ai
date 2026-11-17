@@ -1,6 +1,6 @@
 package br.com.rick.deskmind_backend.analysis;
 
-public enum AnalysisCategory {
+public enum AnalisysCategory {
     GENERAL,
     TECHNICAL,
     BILLING,
