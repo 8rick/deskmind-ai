@@ -38,8 +38,8 @@ def analyze(title: str, description: str | None) -> AnalysisResponse:
     
     llm = ChatOpenAI(
         model=modelo_name, 
-        base_url="https://api.groq.com/openai/v1",
-        api_key=os.getenv("OPENAI_API_KEY"),
+        base_url="BASE_URL",
+        api_key=os.getenv("GROQ_API_KEY"),
         temperature=0,
     )
 
