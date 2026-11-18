@@ -29,7 +29,7 @@ public class TicketAnalisysService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
-        //chama o analisador falso de teste (depois coloca a ia)
+
         AnalisysSuggestion suggestion = ticketAnalyzer.analyze(
                 ticket.getTitle(),
                 ticket.getDescription()
@@ -45,7 +45,7 @@ public class TicketAnalisysService {
 
         );
 
-        TicketAnalisys saved = ticketAnalisysRepository.save((analysis));
+        TicketAnalisys saved = ticketAnalisysRepository.save(analysis);
         return AnalisysResponse.from(saved);
     }
 
