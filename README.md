@@ -1,8 +1,8 @@
 # DeskMind AI
 
 <p align="center">
-  <strong>Intelligent ticket management and support triage</strong><br />
-  An application that combines a ticket management API with an AI service to organize support requests and generate actionable first-response suggestions.
+  <strong>Gestão de chamados e triagem inteligente com IA</strong><br />
+  Uma aplicação que combina uma API de gerenciamento de chamados com um serviço de inteligência artificial para organizar solicitações de suporte e gerar sugestões iniciais de atendimento.
 </p>
 
 <p align="center">
@@ -10,126 +10,126 @@
   <img src="https://img.shields.io/badge/Spring_Boot-4.1.2-6DB33F?logo=springboot&logoColor=white" alt="Spring Boot" />
   <img src="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white" alt="Python 3.12" />
   <img src="https://img.shields.io/badge/FastAPI-0.163-009688?logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/Status-In_Development-yellow" alt="In development" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Banco_de_dados-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Status-Em_desenvolvimento-yellow" alt="Em desenvolvimento" />
 </p>
 
 ---
 
-## Overview
+## Visão geral
 
-**DeskMind AI** is a project in development focused on improving the initial triage of IT support tickets.
+**DeskMind AI** é um projeto em desenvolvimento que busca aprimorar a triagem inicial de chamados de suporte de TI.
 
-The application receives support requests, stores them, and uses an AI-powered analysis service to identify the ticket category and priority. It also generates a concise summary, explains the classification, and suggests a response that can help a support agent handle the request.
+A aplicação recebe e armazena solicitações de suporte e utiliza um serviço de análise baseado em inteligência artificial para identificar a categoria e a prioridade de cada chamado. Além disso, gera um resumo, explica a classificação realizada e sugere uma resposta que pode auxiliar o profissional responsável pelo atendimento.
 
-The goal is to make the first stage of support more organized and consistent while keeping the analysis available for later review.
+O objetivo é tornar a etapa inicial do suporte mais organizada e consistente, mantendo o histórico das análises disponível para consulta.
 
-> **Project status:** the backend and AI analysis integration are under active development. A frontend interface and human review workflow are not yet part of the current implementation.
+> **Status do projeto:** o backend e a integração com o serviço de análise por IA estão em desenvolvimento ativo. Uma interface frontend e um fluxo de revisão humana ainda não fazem parte da implementação atual.
 
-## How it works
+## Como funciona
 
-1. A ticket is created through the Spring Boot REST API.
-2. The Java backend sends the ticket title and description to the Python analysis service.
-3. The AI service evaluates the request using operational support guidelines.
-4. The model returns a structured analysis.
-5. The Java backend stores the analysis in PostgreSQL and makes it available through the API.
+1. Um chamado é criado por meio da API REST desenvolvida com Spring Boot.
+2. O backend em Java envia o título e a descrição do chamado para o serviço de análise em Python.
+3. O serviço de IA avalia a solicitação com base em diretrizes operacionais de suporte.
+4. O modelo retorna uma análise estruturada.
+5. O backend Java armazena a análise no PostgreSQL e disponibiliza os dados por meio da API.
 
-## Architecture
+## Arquitetura
 
-The project is organized into two independent backend services. The Java application owns ticket management and persistence, while the Python service is responsible for AI-powered analysis.
+O projeto está organizado em dois serviços de backend independentes. A aplicação Java é responsável pelo gerenciamento dos chamados e pela persistência dos dados, enquanto o serviço em Python realiza as análises com inteligência artificial.
 
 ```mermaid
 flowchart LR
-    Client[API Client] --> API[Spring Boot API]
+    Client[Cliente da API] --> API[API Spring Boot]
     API --> DB[(PostgreSQL)]
-    API -->|HTTP /analyze| AI[FastAPI AI Service]
-    AI --> Prompt[Operational Prompt]
-    Prompt --> LLM[LLM Provider]
+    API -->|HTTP /analyze| AI[Serviço de IA FastAPI]
+    AI --> Prompt[Prompt operacional]
+    Prompt --> LLM[Provedor de LLM]
     LLM --> AI
-    AI -->|Structured analysis| API
-    API -->|Persist analysis| DB
+    AI -->|Análise estruturada| API
+    API -->|Persistência da análise| DB
 ```
 
-### Services
+### Serviços
 
-| Service | Responsibility | Main technologies |
+| Serviço | Responsabilidade | Principais tecnologias |
 |---|---|---|
-| **Backend API** | Ticket lifecycle, REST endpoints, persistence and communication with the AI service | Java 25, Spring Boot, Spring Data JPA, Spring RestClient, Flyway |
-| **AI Service** | Input validation, ticket analysis and structured response generation | Python 3.12, FastAPI, Pydantic, LangChain, Groq API |
-| **Database** | Stores tickets and their analysis history | PostgreSQL |
+| **Backend API** | Gerenciamento do ciclo de vida dos chamados, endpoints REST, persistência e comunicação com o serviço de IA | Java 25, Spring Boot, Spring Data JPA, Spring RestClient, Flyway |
+| **Serviço de IA** | Validação de entrada, análise dos chamados e geração de respostas estruturadas | Python 3.12, FastAPI, Pydantic, LangChain, API da Groq |
+| **Banco de dados** | Armazenamento dos chamados e do histórico de análises | PostgreSQL |
 
-## AI analysis
+## Análise com inteligência artificial
 
-Each ticket analysis returns the following information:
+Cada análise de chamado retorna as seguintes informações:
 
-| Field | Description |
+| Campo | Descrição |
 |---|---|
-| `category` | Ticket classification |
-| `priority` | Suggested urgency level |
-| `summary` | Short description of the reported issue |
-| `suggestedResponse` | Suggested message for the support agent |
-| `reasoning` | Explanation for the classification |
+| `category` | Classificação do chamado |
+| `priority` | Nível de prioridade sugerido |
+| `summary` | Resumo do problema relatado |
+| `suggestedResponse` | Resposta sugerida para o profissional de suporte |
+| `reasoning` | Justificativa para a classificação realizada |
 
-### Supported categories
+### Categorias disponíveis
 
-- `GENERAL` — general questions and requests.
-- `TECHNICAL` — bugs, errors, performance and integration issues.
-- `BILLING` — invoices, charges, payment and subscription matters.
-- `ACCESS` — login, password and permission issues.
+- `GENERAL` — dúvidas gerais e solicitações diversas.
+- `TECHNICAL` — bugs, erros, problemas de desempenho e falhas de integração.
+- `BILLING` — cobranças, notas fiscais, pagamentos e assinaturas.
+- `ACCESS` — problemas de login, senha e permissões de acesso.
 
-### Priority levels
+### Níveis de prioridade
 
-| Priority | Meaning |
+| Prioridade | Significado |
 |---|---|
-| `LOW` | General questions, improvement requests and non-urgent adjustments |
-| `MEDIUM` | Partial issues or situations with a workaround |
-| `HIGH` | Main functionality unavailable without a workaround |
-| `URGENT` | Critical incidents, broad impact or business-critical disruption |
+| `LOW` | Dúvidas gerais, solicitações de melhoria e ajustes sem urgência |
+| `MEDIUM` | Problemas parciais ou situações que possuem uma alternativa temporária |
+| `HIGH` | Funcionalidade principal indisponível e sem alternativa de contorno |
+| `URGENT` | Incidentes críticos, com impacto amplo ou interrupção de atividades essenciais |
 
-The AI service uses a structured output schema with predefined category and priority values. This keeps the response predictable for the Java backend and allows the analysis to be persisted consistently.
+O serviço de IA utiliza um esquema de saída estruturada com valores predefinidos para categoria e prioridade. Isso mantém o formato da resposta previsível para o backend Java e permite que as análises sejam persistidas de maneira consistente.
 
-The analysis prompt also applies operational guidelines, such as not requesting user passwords, avoiding unsupported promises, and asking for relevant diagnostic details when needed.
+O prompt de análise também aplica diretrizes operacionais, como não solicitar senhas dos usuários, evitar promessas sem fundamento e pedir informações relevantes para diagnóstico quando necessário.
 
-## Current capabilities
+## Funcionalidades implementadas
 
-- Create, retrieve and list support tickets.
-- Update ticket status.
-- Request an AI analysis for a ticket.
-- Classify tickets by category and priority.
-- Generate a summary, reasoning and suggested response.
-- Persist ticket analyses and retrieve their history.
-- Validate incoming data with Jakarta Validation and Pydantic.
-- Manage database schema changes with Flyway.
-- Communicate between Java and Python services over HTTP.
+- Criar, consultar e listar chamados de suporte.
+- Atualizar o status de um chamado.
+- Solicitar uma análise de IA para um chamado.
+- Classificar chamados por categoria e prioridade.
+- Gerar resumo, justificativa e sugestão de resposta.
+- Armazenar as análises e consultar o histórico de cada chamado.
+- Validar dados de entrada com Jakarta Validation e Pydantic.
+- Gerenciar alterações no esquema do banco de dados com Flyway.
+- Realizar a comunicação HTTP entre os serviços Java e Python.
 
-## API reference
+## Referência da API
 
-The endpoints below are available in the current backend implementation.
+Os endpoints abaixo estão disponíveis na implementação atual do backend.
 
-### Tickets
+### Chamados
 
-| Method | Endpoint | Description |
+| Método | Endpoint | Descrição |
 |---|---|---|
-| `POST` | `/api/v1/tickets` | Create a ticket |
-| `GET` | `/api/v1/tickets` | List tickets |
-| `GET` | `/api/v1/tickets/{id}` | Retrieve a ticket |
-| `PATCH` | `/api/v1/tickets/{id}/status` | Update ticket status |
+| `POST` | `/api/v1/tickets` | Criar um chamado |
+| `GET` | `/api/v1/tickets` | Listar chamados |
+| `GET` | `/api/v1/tickets/{id}` | Consultar um chamado |
+| `PATCH` | `/api/v1/tickets/{id}/status` | Atualizar o status de um chamado |
 
-### Ticket analysis
+### Análise dos chamados
 
-| Method | Endpoint | Description |
+| Método | Endpoint | Descrição |
 |---|---|---|
-| `POST` | `/api/v1/tickets/{ticketId}/analyses` | Request a new AI analysis |
-| `GET` | `/api/v1/tickets/{ticketId}/analyses` | List analyses for a ticket |
+| `POST` | `/api/v1/tickets/{ticketId}/analyses` | Solicitar uma nova análise por IA |
+| `GET` | `/api/v1/tickets/{ticketId}/analyses` | Listar as análises de um chamado |
 
-### AI service
+### Serviço de IA
 
-| Method | Endpoint | Description |
+| Método | Endpoint | Descrição |
 |---|---|---|
-| `GET` | `/health` | Check service health |
-| `POST` | `/analyze` | Analyze a ticket |
+| `GET` | `/health` | Verificar a saúde do serviço |
+| `POST` | `/analyze` | Analisar um chamado |
 
-### Example: create a ticket
+### Exemplo: criar um chamado
 
 ```http
 POST /api/v1/tickets
@@ -138,20 +138,20 @@ Content-Type: application/json
 
 ```json
 {
-  "title": "Unable to access the platform",
-  "description": "I receive an error when trying to sign in."
+  "title": "Não consigo acessar a plataforma",
+  "description": "Recebo uma mensagem de erro ao tentar fazer login."
 }
 ```
 
-Use the returned ticket ID to request an analysis:
+Utilize o ID do chamado retornado pela API para solicitar uma análise:
 
 ```http
 POST /api/v1/tickets/{ticketId}/analyses
 ```
 
-The response contains the generated classification, priority, summary, suggested response and reasoning.
+A resposta contém a classificação gerada, a prioridade, o resumo, a sugestão de resposta e a justificativa da análise.
 
-## Technology stack
+## Tecnologias utilizadas
 
 **Backend**
 - Java 25
@@ -161,162 +161,162 @@ The response contains the generated classification, priority, summary, suggested
 - Jakarta Validation
 - Spring RestClient
 
-**AI service**
+**Serviço de IA**
 - Python 3.12
 - FastAPI
 - Pydantic v2
 - LangChain
-- Groq API (OpenAI-compatible interface)
+- API da Groq (interface compatível com a API da OpenAI)
 
-**Data and tooling**
+**Dados e ferramentas**
 - PostgreSQL
 - Flyway
 - Maven
 - Uvicorn
-- Git and GitHub
+- Git e GitHub
 
-## Running locally
+## Executando localmente
 
-### Prerequisites
+### Pré-requisitos
 
 - Java 25
 - Python 3.12
-- PostgreSQL database
+- Banco de dados PostgreSQL
 - Git
-- A Groq API key
+- Uma chave de API da Groq
 
-### 1. Clone the repository
+### 1. Clone o repositório
 
 ```bash
 git clone https://github.com/8rick/deskmind-ai.git
 cd deskmind-ai
 ```
 
-### 2. Configure the AI service
+### 2. Configure o serviço de IA
 
-Create and activate a virtual environment:
+Crie e ative um ambiente virtual:
 
 ```bash
 python -m venv .venv
 ```
 
-On Windows:
+No Windows:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-On macOS/Linux:
+No macOS/Linux:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Install dependencies:
+Instale as dependências:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Create a local environment file from the example:
+Crie um arquivo de ambiente local a partir do modelo:
 
 ```bash
 cp .env.example .env
 ```
 
-On Windows PowerShell:
+No Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Set your Groq API key in `.env`:
+Configure sua chave da Groq no arquivo `.env`:
 
 ```env
-GROQ_API_KEY=your_groq_api_key
+GROQ_API_KEY=sua_chave_de_api_groq
 LLM_BASE_URL=https://api.groq.com/openai/v1
 LLM_MODEL=llama-3.3-70b-versatile
 ```
 
-Start the AI service:
+Inicie o serviço de IA:
 
 ```bash
 uvicorn app.main:app --reload --port 8001
 ```
 
-The service will be available at `http://localhost:8001`. Its health endpoint is `http://localhost:8001/health`.
+O serviço ficará disponível em `http://localhost:8001`. O endpoint de verificação de saúde estará em `http://localhost:8001/health`.
 
-### 3. Configure PostgreSQL and the Java backend
+### 3. Configure o PostgreSQL e o backend Java
 
-Create a PostgreSQL database and provide the following environment variables to the Java application:
+Crie um banco de dados PostgreSQL e disponibilize as seguintes variáveis de ambiente para a aplicação Java:
 
 ```env
 DATABASE_URL=jdbc:postgresql://localhost:5432/deskmind
-DATABASE_USER=your_database_user
-DATABASE_PASSWORD=your_database_password
+DATABASE_USER=seu_usuario
+DATABASE_PASSWORD=sua_senha
 ```
 
-The backend uses Flyway to apply the database migrations on startup. The current configuration expects the AI service at `http://localhost:8001`.
+O backend utiliza o Flyway para aplicar as migrações do banco de dados durante a inicialização. A configuração atual espera que o serviço de IA esteja disponível em `http://localhost:8001`.
 
-In a second terminal, run:
+Em um segundo terminal, execute:
 
 ```bash
 cd deskmind-backend
 ./mvnw spring-boot:run
 ```
 
-On Windows:
+No Windows:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-The API will be available at `http://localhost:8080`.
+A API ficará disponível em `http://localhost:8080`.
 
-### 4. API documentation
+### 4. Documentação da API
 
-When the backend is running, access the Swagger UI:
+Com o backend em execução, acesse a interface do Swagger:
 
 [`http://localhost:8080/swagger-ui/index.html`](http://localhost:8080/swagger-ui/index.html)
 
-> Keep credentials in local environment variables. Do not commit your `.env` file or expose API keys in the repository.
+> Mantenha as credenciais em variáveis de ambiente locais. Não envie seu arquivo `.env` para o repositório nem exponha chaves de API.
 
 ## Roadmap
 
-The project is evolving in incremental stages. Planned improvements include:
+O projeto está evoluindo em etapas. Entre as melhorias planejadas estão:
 
-- [ ] Human review of AI-generated analyses, with approval and rejection flow.
-- [ ] Retrieval-Augmented Generation (RAG) with a knowledge base for context-aware suggestions.
-- [ ] Frontend interface for ticket management and analysis review.
-- [ ] Expanded automated tests and integration coverage.
-- [ ] Improved observability and operational error handling.
+- [ ] Implementar revisão humana das análises geradas pela IA, com fluxo de aprovação e rejeição.
+- [ ] Implementar RAG (Retrieval-Augmented Generation) com uma base de conhecimento para gerar sugestões contextualizadas.
+- [ ] Desenvolver uma interface frontend para gerenciamento de chamados e revisão das análises.
+- [ ] Ampliar os testes automatizados e a cobertura de testes de integração.
+- [ ] Aprimorar a observabilidade e o tratamento de erros operacionais.
 
-## Repository structure
+## Estrutura do repositório
 
 ```text
 deskmind-ai/
-├── app/                         # Python AI service
-│   ├── analyzer.py              # Prompt, LLM integration and analysis chain
-│   ├── main.py                  # FastAPI application and routes
-│   └── schemas.py               # Pydantic request and response schemas
-├── deskmind-backend/            # Java backend
-│   ├── src/main/java/           # REST API, domain and application services
+├── app/                         # Serviço de IA em Python
+│   ├── analyzer.py              # Prompt, integração com LLM e cadeia de análise
+│   ├── main.py                  # Aplicação FastAPI e rotas
+│   └── schemas.py               # Esquemas Pydantic de requisição e resposta
+├── deskmind-backend/            # Backend Java
+│   ├── src/main/java/           # API REST, domínio e serviços da aplicação
 │   └── src/main/resources/
 │       ├── application.properties
-│       └── db/migration/         # Flyway migrations
-├── .env.example                 # Environment variable template
-├── requirements.txt             # Python dependencies
+│       └── db/migration/         # Migrações do Flyway
+├── .env.example                 # Modelo das variáveis de ambiente
+├── requirements.txt             # Dependências do Python
 └── README.md
 ```
 
-## About
+## Sobre
 
-DeskMind AI is an independent software development project created by [Rickelmy Barbosa da Silva](https://github.com/8rick).
+O DeskMind AI é um projeto independente de desenvolvimento de software criado por [Rickelmy Barbosa da Silva](https://github.com/8rick).
 
-The repository is public and open to feedback, suggestions and technical discussions.
+O repositório é público e está aberto a feedbacks, sugestões e discussões técnicas.
 
 ---
 
 <p align="center">
-  <sub>DeskMind AI · Intelligent support triage</sub>
+  <sub>DeskMind AI · Triagem inteligente de chamados</sub>
 </p>
