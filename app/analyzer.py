@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from app.schemas import AnalysisResponse
 
-load_dotenv(override=True)
+load_dotenv()
 
 SYSTEM_PROMPT = """Você é um especialista em triagem e suporte técnico da plataforma Deskmind.
 Analise o chamado e classifique-o estritamente de acordo com o esquema estruturado e as NORMAS OPERACIONAIS abaixo.
