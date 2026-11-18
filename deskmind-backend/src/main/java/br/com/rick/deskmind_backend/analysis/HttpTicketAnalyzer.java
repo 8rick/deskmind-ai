@@ -21,6 +21,10 @@ public class HttpTicketAnalyzer implements TicketAnalyzer {
             RestClient.Builder builder,
             @Value("${ai.service.url}") String aiServiceUrl
     ) {
+        var factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(5000); // 5s p/ concectar
+        factory.setConnectTimeout(30000); // 30s p/ o LLM responder
+
         this.restClient = builder
                 .baseUrl(aiServiceUrl)
                 .requestFactory(new SimpleClientHttpRequestFactory())
