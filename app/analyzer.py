@@ -1,10 +1,16 @@
+# Compatível com LangChain v0.2+ (pacotes langchain_core e langchain_openai)
+import logging
 import os
 from dotenv import load_dotenv
+from fastapi import HTTPException
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+
 from app.schemas import AnalysisResponse
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = """Você é um especialista em triagem e suporte técnico da plataforma Deskmind.
 Analise o chamado e classifique-o estritamente de acordo com o esquema estruturado e as NORMAS OPERACIONAIS abaixo.
@@ -33,27 +39,39 @@ prompt = ChatPromptTemplate.from_messages([
     ("human", "Titulo do chamado: {title}\nDescrição: {description}"),
 ])
 
+_model_name = os.getenv("LLM_MODEL", "openai/gpt-oss-20b")
+_base_url = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
+_api_key = os.getenv("GROQ_API_KEY")
+
+_llm = ChatOpenAI(
+    model=_model_name,
+    base_url=_base_url,
+    api_key=_api_key,
+    temperature=0,
+    timeout=30.0,
+    max_retries=2,
+)
+
+# isso  method="function_calling"serve  para evitar conflitos com o esquema da Groq
+_structured_llm = _llm.with_structured_output(AnalysisResponse, method="function_calling")
+_chain = prompt | _structured_llm
+
+
 def analyze(title: str, description: str | None) -> AnalysisResponse:
-    modelo_name = os.getenv("LLM_MODEL", "openai/gpt-oss-20b")
-    
-    llm = ChatOpenAI(
-        model=modelo_name, 
-        base_url="LLM_BASE_URL",
-        api_key=os.getenv("GROQ_API_KEY"),
-        temperature=0,
-    )
-
-    # Adicione method="function_calling" para evitar conflitos com o esquema da Groq
-    structured_llm = llm.with_structured_output(AnalysisResponse, method="function_calling")
-    chain = prompt | structured_llm
-
     clean_description = (
         description.strip()
         if description and description.strip()
         else "Não informado"
     )
 
-    return chain.invoke({
-        "title": title,
-        "description": clean_description
-    })
+    try:
+        return _chain.invoke({
+            "title": title,
+            "description": clean_description,
+        })
+    except Exception as ex:
+        logger.exception("Erro ao consultar o provedor de LLM")
+        raise HTTPException(
+            status_code=502,
+            detail="Falha ao processar análise no provedor de IA.",
+        ) from ex
